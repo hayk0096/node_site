@@ -1,0 +1,41 @@
+extends ../../_template
+
+block head
+    title= title
+
+block content
+
+    if (products || products != null)
+        table
+            thead
+                tr
+                    td Product Name
+                    td Product Count
+                    td Product Price
+            tbody
+              each product in products
+                tr
+                    td= product.name
+                    td= product.count
+                    td= product.price
+                        button(class="btn btn-danger remove_product") -
+
+    script.
+        var removeBtn = document.querySelectorAll('.remove_product');
+        [].forEach.call(removeBtn, function (item) {
+            item.addEventListener('click', removeProduct);
+        });
+        function removeProduct() {
+            var parent = this.parentNode.parentNode;
+            var tBody = parent.parentNode;
+            var pName = parent.textContent;
+            var repName = pName.replace(/[0-9]+\-$/, " ");
+            var repNameTrim = repName.trim();
+            tBody.removeChild(parent);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/cart/remove', true);
+            xhr.onload = function () {
+                console.log(xhr.responseText);
+            }
+            xhr.send(JSON.stringify({pName: repNameTrim}));
+        }

@@ -1,0 +1,101 @@
+extends ../../_template
+
+block head
+    each product in result
+        title= product.name
+
+block content
+     .container-fluid
+         .row
+             .col-md-12.p-5
+         .row
+           each product in result
+            .col-md-1.product-all-types
+                .product-types
+                    ul
+                      li
+                        img(src=`/uploads/${product.default_image}`)
+                .product-types
+                    ul
+                        li
+                            img(src=`/uploads/${product.default_image}`)
+            .col-md-6
+                .product-single-image
+                    img(src=`/uploads/${product.default_image}`)
+            .col-md-5
+              h3= product.name
+              .product-single-price.pull-left.w-100
+                  each currency in currencies
+                      if product.currency_id === currency.id
+                          = currency.symbol
+                  = product.price
+              .border-dotted
+              .product-color-types
+                  span.property-name COLOR
+                  .items
+                      a(href="" title="").item-attr
+                          img(src=`/uploads/${product.default_image}`)
+                      a(href="" title="").item-attr
+                          img(src=`/uploads/${product.default_image}`)
+                      a(href="" title="").item-attr
+                          img(src=`/uploads/${product.default_image}`)
+                      a(href="" title="").item-attr
+                          img(src=`/uploads/${product.default_image}`)
+              .product-size-types
+                  span.size-title SIZE
+                  .size_list
+                      a(href="" title="").item-attr S
+                      a(href="" title="").item-attr M
+                      a(href="" title="").item-attr L
+                      a(href="" title="").item-attr XL
+                      a(href="" title="").item-attr 2XL
+              .plus-minus-center
+                  span QTY
+                  p
+                  .input-group
+                      span.input-group-btn
+                         button(type="button" data-type="minus" data-field="quant[1]").btn.btn-danger.btn-number
+                            span.glyphicon.glyphicon-minus -
+                      input(type="text" name="quant[1]" value="1" min="1" max="20").form-control.input-number
+                      //if in db there not choosing count add max attribute in input
+                      span.input-group-btn
+                         button(type="button" data-type="plus" data-field="quant[1]").btn.btn-success.btn-number
+                            span.glyphicon.glyphicon-plus +
+                  p
+              button.btn.btn-success.btn-normal#add_to_cart Add to bag
+              .product-block-description
+                  .prod_desc_title DESCRIPTION
+                  div #{product.description}
+
+
+     script.
+
+         var products = [];
+         var product = document.querySelector('#add_to_bag');
+
+         product.addEventListener('click', function () {
+             products.push({
+                 id: this.getAttribute('data-id'),
+                 price: parseInt(this.getAttribute('data-price')),
+                 name: this.getAttribute('data-name'),
+                 count: 1
+             });
+
+             for (var i = 0; i < products.length; i++) {
+                 for (var j = 0; j < products.length; j++) {
+                     if (products[i].id === products[j].id) {
+                         ++products[i].count;
+                         products[i].price += products[j].price;
+                         products.splice(j, 1);
+                     }
+                 }
+             }
+
+             var newXhr = new XMLHttpRequest();
+             newXhr.open('POST', '/cart', true);
+             newXhr.onload = function () {
+                 /*console.log(newXhr.responseText);*/
+             };
+             newXhr.send(JSON.stringify(product));
+         })
+

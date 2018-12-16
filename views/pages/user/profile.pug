@@ -1,0 +1,15 @@
+extends ../../_template
+
+block head
+    title= title
+
+block content
+    div.container-fluid
+      div.row
+        div.col-md-12
+            each val in user
+                p= val.firstname
+                p= val.lastname
+                p= val.email
+                p= val.birthdate
+                p= val.avatar_img

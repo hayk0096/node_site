@@ -1,0 +1,20 @@
+extends ../../_template
+
+block head
+    title= title
+
+block content
+  .container-fluid
+     .row.panel
+        .col-md-10
+            h5.text-center.mt-5.mb-5 Welcome Login page
+            form(action="/login" method="POST").text-center.form-content__edit
+                .form-group
+                    label(rel="username").float-left Username
+                    input(type="text" name="username")#username.form-control
+                .form-group
+                    label(rel="password").float-left Password
+                    input(type="password" name="password")#password.form-control
+                button(type="submit" class="btn btn-success btn-md float-left") Login
+        .col-md-12.text-center
+            a(href="/register") If you are not user you can register

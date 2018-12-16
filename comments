@@ -1,0 +1,71 @@
+table
+                     thead
+                        tr
+                          th(colspan="2").text-center Please fill all fields
+                     tbody
+                        tr
+                          td
+                            label(for="p_name").float-left Name *
+                          td
+                            input(type="text" id="p_name" name="name").form-control
+                        tr
+                          td
+                            label(for="p_image").float-left Image *
+                          td
+                            input(type="file" id="p_image" name="image").form-control
+                        tr
+                          td
+                            label(for="p_price").float-left Price *
+                          td#product_price
+                            input(type="text" id="p_price" name="price" maxlength="11").form-control
+                            select(name="currency_name")#p_currency.form-control
+                                option(value='' name='default') currency
+                                each currency in currencies
+                                    option(value=currency.id name='currencyID')= currency.code
+                            #currency-name.form-control
+                        tr
+                          td.choose-cat-name
+                            label(for="p_category__name").float-left Category Name *
+                          td
+                              select(id="p_category__name" name="category_name").form-control
+                                  each category in categories
+                                      option(value=category.id name='categoryId')= category.name
+                        tr
+                          td
+                            label(for="p_description").float-left Description *
+                          td
+                            textarea(id="p_description" name="description" rows="7").form-control
+                        tr
+                          td(colspan="2" align="right")
+                            //button(type="submit").btn.btn-success.btn-md.mt-3 Fill all fields
+                            button(type="submit").btn.btn-success.btn-md.mt-3 Create
+
+
+  upperLower();
+
+       function upperLower() {
+
+           $('#emailInput').on('input', function () {
+
+               $('#emailInput').keypress(function (e) {
+                   let c = String.fromCharCode(e.which),
+                       msg = this.closest('div').children[2];
+                   if (c.toUpperCase() === c && c.toLowerCase() !== c) {
+                       msg.text = 'Caps Lock is ON';
+                       msg.style.display = 'block';
+                   } else if (e.shiftKey) {
+                       msg.text = 'Shift key is ON';
+                       msg.style.display = 'block';
+                   } else {
+                       // msg.innerHTML = ' ';
+                       // msg.public.display = 'none';
+                   }
+               });
+
+               this.style.borderColor = '#bdc7d8';
+               this.closest('div').children[1].style.display = 'none';
+           });
+
+       }
+
+

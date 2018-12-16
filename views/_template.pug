@@ -1,0 +1,60 @@
+doctype html
+html
+    head
+        meta(content="" name="author")
+        meta(content="" name="description")
+        block head
+            title Node Site
+        meta(content="" name="keywords")
+        link(rel='stylesheet' href='/stylesheets/bootstrap.css')
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css")
+        link(rel="stylesheet" href="https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_glyphicons.scss")
+        link(rel="stylesheet" href="/stylesheets/main.css")
+        link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous")
+    body
+        .navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top(role="navigation")
+            .container
+                a(href="/home").navbar-brand Node Site
+                #exCollapsingNavbar.collapse.navbar-collapse
+                    ul.nav.navbar-nav.text-center
+                        li(class=(title == 'Products' ? 'active' : '')).nav-item
+                            a(href="/products").nav-link Products
+                        if (!user)
+                            li(class=(title == 'Register' ? 'active' : '')).nav-item
+                                a(href="/register").nav-link Register
+                        li(class=(title == 'Login' ? 'active' : '')).nav-item
+                            a(href="/login").nav-link Login
+                        li(class=(title == 'About' ? 'active' : '')).nav-item
+                            a(href="/about").nav-link About
+                        li(class=(title == 'Cart' ? 'active' : '')).nav-item
+                            a(href="/cart").nav-link
+                                i.fa.fa-cart-plus
+
+                    ul.nav.navbar-nav.flex-row.justify-content-between.ml-auto
+                        li.nav-item.order-2.order-md-1
+                            a(href="", title="settings").nav-link
+                                i.fa.fa-cog.fa-fw.fa-lg
+                        li.dropdown.order-1
+                            button(type="button", data-toggle="dropdown")#dropdownMenu1.btn.btn-outline-secondary.dropdown-toggle Login
+                                span.caret
+                            ul.dropdown-menu.dropdown-menu-right.mt-2
+                                li.px-3.py-2
+                                    form(action='/login' method='POST' enctype='multipart/form-data').form
+                                        .form-group
+                                            input(placeholder="Email", type="text", name='username' required="")#emailInput.form-control.form-control-sm
+                                        .form-group
+                                            input(placeholder="Password" type="password" name='password' required="")#passwordInput.form-control.form-control-sm
+                                        .form-group
+                                            button(type="submit").btn.btn-primary.btn-block Login
+                                        .form-group.text-center
+                                            small
+                                                a(href="#" data-toggle="modal" data-target="#modalPassword") Forgot password?
+
+        .container
+            block content
+
+
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
+    script(src='/scripts/bootstrap.js')
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous")
+    script(src="/scripts/main.js")

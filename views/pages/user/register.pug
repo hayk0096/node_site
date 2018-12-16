@@ -1,0 +1,194 @@
+extends ../../_template
+
+block head
+    title= title
+
+block content
+  div.container-fluid
+    div.row.panel
+        div.col-md-10
+            if (errors)
+                h5.text-center.mt-3.mb-3 #{errorTitle}
+                each error in errors
+                    .alert.alert-danger= error.msg
+            else
+                h5.text-center.mt-3.mb-3 Welcome #{title} page
+            form(action="/register" method="POST").text-center.form-content__edit.register-form
+                .form-group.d-flex.flex-row.user-name
+                    .p-1
+                        input(type="text" name="firstName" placeholder='First name' required)#f_name.form-control.reg-input
+                        i
+                    .p-1.ml-2
+                        input(type="text" name="lastName" placeholder='Last name' required)#l_name.form-control.reg-input
+                        i
+                .form-group.user-email
+                    .p-1
+                        input(type="email" name='email' placeholder='Email' required)#email.form-control.reg-input
+                        i
+                .form-group.user-re-email
+                    .p-1
+                        input(type="email" name="reEmail" placeholder='Re-enter Email' required)#reEnterEmail.form-control.reg-input
+                        i
+                        .alert.alert-danger email and re enter email is not mutch
+                .form-group.birthday_select.d-flex.text-center.birthday_select
+                    .birth_title.d-inline-flex.p-3 Birth date
+                    .d-inline-flex.p-2
+                        select(name='birthMonth')#month.form-control
+                            option(value="0") Month
+                    .d-inline-flex.p-2
+                        select(name='birthDay')#day.form-control
+                            option(value="0") Day
+                    .d-inline-flex.p-2
+                        select(name='birthYear')#year.form-control
+                            option(value="0") Year
+                //.form-group
+                    label(for="start") Start date:
+                    input(type="date" id="start" name="birthdate" value="1990-12-04" max="2018-04-12" min="1905-01-01")
+                .form-group.gender.d-flex.justify-content-start
+                    .gender-title.p-2.mr-4.ml-2 Gender
+                    .btn-group.btn-group-toggle(data-toggle="buttons")
+                        label.btn.btn-secondary.active Female
+                            input(type="radio" name="gender" value='female' autocomplete="off" checked)#female
+                        label.btn.btn-secondary Male
+                            input(type="radio" name="gender" value='male' autocomplete="off")#male
+                .form-group.user-password
+                    .p-1
+                        input(type="password" name="password" placeholder='Password' required)#password.form-control.reg-input
+                        i
+                .form-group.d-flex.justify-content-center.align-content-center
+                    .w-50.reg_btn
+                        button(type="submit" ).btn.btn-success.btn-md.btn-block Register
+
+  script.
+
+      // add .btn-outline-success  classname in button where all fields will be filled
+
+      var current = new Date(),
+          getYear = current.getFullYear(),
+          century = getYear - 113,
+
+          cYear = current.getFullYear() - 25,
+          cMonth = current.getMonth() + 1,
+          cDay = current.getDate();
+
+      var yearSelect = document.querySelector('#year');
+      var selected = document.createAttribute('selected');
+      selected.value = 'selected';
+
+      for (let y = getYear; y >= century; y--) {
+          yearSelect.innerHTML += `<option value="${y}"> ${y} </option>`;
+          if (cYear === y) {
+              for (let c = 0; c < yearSelect.childNodes.length; c++) {
+                  if (yearSelect.childNodes[c].value == y) {
+                      yearSelect.childNodes[c].setAttribute('selected', 'selected');
+                  }
+              }
+          }
+      }
+
+      var months = ["Month", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      var monthSelect = document.querySelector('#month');
+
+      for (let m = 0; m <= months.length - 1; m++) {
+          if (m === 0) {
+              monthSelect.innerHTML = ' ';
+          }
+          monthSelect.innerHTML += `<option value="${m}"> ${months[m]} </option>`;
+          if (cMonth === m) {
+              monthSelect[m].setAttribute('selected', 'selected');
+          }
+      }
+
+      var daySelect = document.querySelector('#day');
+
+      for (let d = 1; d <= 31; d++) {
+          daySelect.innerHTML += `<option value="${d}"> ${d} </option>`;
+          if (cDay === d) {
+              daySelect[d].setAttribute('selected', 'selected');
+          }
+      }
+
+      /* Registration panel validation start */
+
+      var regInput = document.querySelectorAll('.reg-input');
+
+      regInput.forEach(function (item, i) {
+          item.addEventListener('blur', function () {
+              if (this.value == '' ) {
+                  this.style.borderColor = 'red';
+                  this.closest('div').children[1].style.display = 'inline';
+              } else {
+                  this.style.borderColor = '#bdc7d8';
+                  this.closest('div').children[1].style.display = 'none';
+              }
+          });
+          /*
+          item.addEventListener('input', function () {
+              regInput.forEach(function (it, k) {
+                  if (regInput[i].value != '') {
+                      console.log('dartak chen');
+                      var k = document.querySelector('.reg_btn button');
+                  }
+              });
+          });*/
+      });
+
+
+      var regSelect = document.querySelectorAll('.birthday_select select');
+      regSelect.forEach(function (item) {
+         item.addEventListener('blur', function () {
+             if (this.value == 0) {
+                 this.style.borderColor = 'red';
+             } else {
+                 this.style.borderColor = '#bdc7d8';
+             }
+         });
+      });
+
+      document.querySelector('.reg_btn button').click(checkInputValid);
+
+      /* Registration panel validation end */
+
+      var reEnter = document.querySelector('#reEnterEmail');
+      reEnter.addEventListener('blur', function () {
+          var email = document.querySelector('#email').value;
+          if ( this.value !== email ) {
+              this.style.borderColor = 'red';
+          } else {
+              this.style.borderColor = '#bdc7d8';
+          }
+      });
+
+
+      function checkInputValid() {
+          alert('test');
+      }
+
+      var email = document.querySelector('#email');
+      email.addEventListener('input', function () {
+          var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/,
+              /*regexNum = /^\+(?:[0-9] ?){7,14}[0-9]$/,*/
+              reEnterEmail = document.querySelector('#reEnterEmail'),
+              result = '';
+
+          if (regex.exec(this.value) !== null) {
+              result = (reEnterEmail.style.display = 'block') + (this.style.borderColor = '#bdc7d8') + (this.closest('div').children[1].style.display = 'none');
+          } else {
+              result = (reEnterEmail.style.display = 'none') + (this.style.borderColor = 'red') + (this.closest('div').children[1].style.display = 'inline');
+          }
+          //        tolowercase
+      })
+
+      var reEnterEmail = document.querySelector('#reEnterEmail');
+      reEnterEmail.addEventListener('input', function () {
+          if (this.value !== email.value) {
+              this.style.borderColor = 'red';
+              this.parentNode.childNodes[1].style.display = 'inline';
+              this.parentNode.childNodes[2].style.display = 'inline-block';
+          } else {
+              this.style.borderColor = '#bdc7d8';
+              this.parentNode.childNodes[1].style.display = 'none';
+              this.parentNode.childNodes[2].style.display = 'none';
+          }
+      });
+

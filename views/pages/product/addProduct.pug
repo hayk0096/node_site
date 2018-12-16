@@ -1,0 +1,91 @@
+extends ../../_template
+
+block head
+    title= title
+
+block content
+    div.conatiner
+      div.container-fluid
+        div.row
+          div.add-product__container
+            div.col-md-8
+              h3.addProductHeader.text-info Create a new product
+              form(action="/add-product" method="POST" enctype="multipart/form-data")
+                  .form
+                      .form-group
+                          input(type="text" name="prod-name" placeholder='Product name')#p_name.form-control
+                      .input-group.mb-3
+                          .input-group-prepend
+                              span.input-group-text Upload image
+                          .custom-file
+                              input(type="file" name='image').custom-file-input#prod-image
+                              label(for="prod-image").custom-file-label Choose file
+                      .col-md-10.d-flex.justify-content-between
+                          .input-group.mb-3#price
+                              .input-group-prepend
+                                 label(for="prod_price").input-group-text Price
+                              input(type="text" name="price" maxlength="11")#prod_price.form-control
+                              select(name="currency_id")#prod_currency.form-control
+                                  option(value='default' selected) currency
+                                  each currency in currencies
+                                      option(value=currency.id )= currency.code
+                              #curr-name.form-control
+                      .col-md-12.d-flex.justify-content-between
+                          .col-md-6
+                              .input-group.mb-3#prod-category
+                                  .input-group-prepend
+                                      label(for="prod_cat").input-group-text Category name
+                                  select(id="prod_cat" name="category_id").form-control.m-0
+                                      each category in categories
+                                          option(value=category.id)= category.name
+                          .col-md-6
+                              .input-group.mb-3#prod-country
+                                  .input-group-prepend
+                                      //label(for="prod_country").input-group-text Country name
+                                  //select(id="prod_country" name="country_name").form-control.m-0
+                                      each country in countries
+                                          option(value=country.id name='countryId')= country.name
+                      .input-group.mb-3
+                        .input-group-prepend
+                            label(for="comment").input-group-text Comment:
+                        textarea(rows="5")#comment.form-control.m-0
+                      .form-group.d-flex.justify-content-center.align-content-center
+                          .w-50.reg_btn
+                              button(type="submit").btn.btn-success.btn-md.btn-block Create
+
+    script.
+
+      var productInfo = document.getElementById('p_name'),
+          checkprodName = /^[a-z]+$/;
+
+      productInfo.oninput = function () {
+          if (this.value !== 0) {
+              this.style.borderColor = '#ced4da';
+              if (checkprodName.test(this.value) && this.value.length > 3) {
+                  this.style.borderColor = '#ced4da'
+              } else {
+                  this.style.outlineColor = 'red'
+              }
+          } else {
+              this.style.outlineColor = 'red';
+          }
+      };
+
+      var form = document.querySelector('.form-control');
+      form.addEventListener("blur", function () {
+          if (this.value.length === 0) {
+             this.style.borderColor = 'red';
+          }
+      }, true);
+
+      var currency = document.querySelector('#prod_currency');
+      currency.addEventListener('input', getCurrencyValue);
+
+      function getCurrencyValue () {
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/currency', true);
+          xhr.onload = function () {
+              document.getElementById('curr-name').innerText = xhr.responseText;
+          }
+          xhr.send(JSON.stringify({id: this.value}));
+      }
